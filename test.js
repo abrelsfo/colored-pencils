@@ -1,0 +1,3 @@
+var cp = require('./');
+
+cp();

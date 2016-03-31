@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset = "utf-8">
+    <meta http-equiv = "X-UA-Compatible" content = "IE = edge">
+    <meta name = "viewport" content = "width = device-width, initial-scale = 1">
+  	<title>Colored Pencils</title>
+    <link href = "./node_modules/bootstrap/dist/css/bootstrap.css" rel = "stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <script src='./node_modules/jquery/dist/jquery.min.js'></script>
+    <script>window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.min.js');</script>
+    <script>
+      function hueTable(picker) {
+        var lineno, header, i, a, match, comp, curH, HSV;
+        var h = Math.round(picker.hsv[0]);
+        var s = Math.round(picker.hsv[1]);
+        var v = Math.round(picker.hsv[2]);
+        var arr = [];
+        lineno = 24;
+
+        for (i = 0; i <= lineno; i++) {
+          var tmp = document.createElement('SPAN');
+          var tp = new jscolor(tmp);
+          tp.fromHSV(i * 15, s, v);
+          arr.push(tp);
+        }
+
+        a = "<table style='width:100%; white-space: nowrap; font-size: 14px;'>";
+        a += "<tbody>";
+        a += "<tr>";
+        a += "<th style='width:150px;'></th>";
+        a += "<th><span>    </span></th>";
+        a += "<th>Hex</th>";
+        a += "<th>Rgb</th>";
+        a += "<th>HSV</th>";
+        a += "</tr>"
+        match = 0;
+
+        for (i = 0; i < arr.length; i++) {
+          curH = Math.round(arr[i].hsv[0]);
+          HSV = h;
+          if (i == arr.length - 1) {curH = 360;}
+          comp = (curH > HSV);
+
+          if (HSV == curH) {
+            match++;
+          }
+          if (comp) {match++;}
+          if (match === 1) {
+            a += "<tr>";
+            a += "<td style='background-color:" + picker.toHEXString() + "'></td>";
+            a += "<td style='width:20px'><span>    </span></td>";
+            a += "<td><b>" + picker.toHEXString() + "</b></td>";
+            a += "<td><b>" + '(' + Math.round(picker.rgb[0]) + ', ' + Math.round(picker.rgb[1]) + ', ' + Math.round(picker.rgb[2]) + ')' + "</b></td>";
+            a += "<td><b>" + '(' + Math.round(picker.hsv[0]) + ', ' + Math.round(picker.hsv[1]) + '%, ' + Math.round(picker.hsv[2]) + '%)' + "</b></td>";
+            a += "</tr>";
+            match = 2;
+          } else {
+            a += "<tr>";
+            a += "<td style='cursor:pointer;background-color:" + arr[i].toHEXString() + "' onclick='toPicker(&quot;hue&quot;, &quot;" + arr[i].toHEXString() + "&quot;)'></td>";
+            a += "<td style='width:20px'><span>    </span></td>";
+            a += "<td>" + arr[i].toHEXString() + "</td>";
+            a += "<td>" + '(' + Math.round(arr[i].rgb[0]) + ', ' + Math.round(arr[i].rgb[1]) + ', ' + Math.round(arr[i].rgb[2]) + ')' + "</td>";
+            a += "<td>" + '(' + Math.round(arr[i].hsv[0]) + ', ' + Math.round(arr[i].hsv[1]) + '%, ' + Math.round(arr[i].hsv[2]) + '%)' + "</td>";
+            a += "</tr>";
+          }
+        }
+        a += "</tbody></table>";
+        document.getElementById("hue-table").innerHTML = a;
+      }
+
+      function satTable(picker) {
+        var lineno, header, i, a, match, comp, curH, HSV;
+        var h = Math.round(picker.hsv[0]);
+        var s = Math.round(picker.hsv[1]);
+        var v = Math.round(picker.hsv[2]);
+        var arr = [];
+        lineno = 20;
+
+        for (i = 0; i <= lineno; i++) {
+          var tmp = document.createElement('SPAN');
+          var tp = new jscolor(tmp);
+          tp.fromHSV(h, i * 5, v);
+          arr.push(tp);
+        }
+        arr.reverse();
+        a = "<table style='width:100%; white-space: nowrap; font-size: 14px;'>";
+        a += "<tbody>";
+        a += "<tr>";
+        a += "<th style='width:150px;'></th>";
+        a += "<th><span>    </span></th>";
+        a += "<th>Hex</th>";
+        a += "<th>Rgb</th>";
+        a += "<th>HSV</th>";
+        a += "</tr>";
+
+        match = 0;
+        for (i = 0; i < arr.length; i++) {
+          curH = Math.round(arr[i].hsv[1]);
+          HSV = s;
+          comp = (curH < HSV);
+          HSV = HSV;
+          curH = curH;
+
+          if (HSV == curH) {
+            match++;
+          }
+          if (comp) {match++;}
+          if (match == 1) {
+            a += "<tr>";
+            a += "<td style='background-color:" + picker.toHEXString() + "'></td>";
+            a += "<td><b>" + picker.toHEXString() + "</b></td>";
+            a += "<td><b>" + '(' + Math.round(picker.rgb[0]) + ', ' + Math.round(picker.rgb[1]) + ', ' + Math.round(picker.rgb[2]) + ')' + "</b></td>";
+            a += "<td><b>" + '(' + Math.round(picker.hsv[0]) + ', ' + Math.round(picker.hsv[1]) + '%, ' + Math.round(picker.hsv[2]) + '%)' + "</b></td>";
+            a += "</tr>";
+            match = 2;
+          } else {
+            a += "<tr>";
+            a += "<td style='cursor:pointer;background-color:" + arr[i].toHEXString() + "' onclick='toPicker(&quot;sat&quot;, &quot;" + arr[i].toHEXString() + "&quot;)'></td>";
+            a += "<td>" + arr[i].toHEXString() + "</td>";
+            a += "<td>" + '(' + Math.round(arr[i].rgb[0]) + ', ' + Math.round(arr[i].rgb[1]) + ', ' + Math.round(arr[i].rgb[2]) + ')' + "</td>";
+            a += "<td>" + '(' + Math.round(arr[i].hsv[0]) + ', ' + Math.round(arr[i].hsv[1]) + '%, ' + Math.round(arr[i].hsv[2]) + '%)' + "</td>";
+            a += "</tr>";
+          }
+        }
+        a += "</tbody></table>";
+        document.getElementById("sat-table").innerHTML = a;
+      }
+
+      function valTable(picker) {
+        var lineno, header, i, a, match, comp, curH, HSV;
+        var h = Math.round(picker.hsv[0]);
+        var s = Math.round(picker.hsv[1]);
+        var v = Math.round(picker.hsv[2]);
+        var arr = [];
+        lineno = 20;
+
+        for (i = 0; i <= lineno; i++) {
+          var tmp = document.createElement('SPAN');
+          var tp = new jscolor(tmp);
+          tp.fromHSV(h, s, i * 5);
+          arr.push(tp);
+        }
+        arr.reverse();
+        a = "<table style='width:100%; white-space: nowrap; font-size: 14px;'>";
+        a += "<tbody>";
+        a += "<tr>";
+        a += "<th style='width:150px;'></th>";
+        a += "<th><span>    </span></th>";
+        a += "<th>Hex</th>";
+        a += "<th>Rgb</th>";
+        a += "<th>HSV</th>";
+        a += "</tr>";
+
+        match = 0;
+        for (i = 0; i < arr.length; i++) {
+          curH = Math.round(arr[i].hsv[2]);
+          HSV = v;
+          comp = (curH < HSV);
+          HSV = HSV + "%";
+          curH = curH + "%";
+          if (HSV == curH) {
+            match++;
+          }
+          if (comp) {match++;}
+          if (match == 1) {
+            a += "<tr>";
+            a += "<td style='background-color:" + picker.toHEXString() + "'></td>";
+            a += "<td><b>" + picker.toHEXString() + "</b></td>";
+            a += "<td><b>" + '(' + Math.round(picker.rgb[0]) + ', ' + Math.round(picker.rgb[1]) + ', ' + Math.round(picker.rgb[2]) + ')' + "</b></td>";
+            a += "<td><b>" + '(' + Math.round(picker.hsv[0]) + ', ' + Math.round(picker.hsv[1]) + '%, ' + Math.round(picker.hsv[2]) + '%)' + "</b></td>";
+            a += "</tr>";
+            match = 2;
+          } else {
+            a += "<tr>";
+            a += "<td style='cursor:pointer;background-color:" + arr[i].toHEXString() + "' onclick='toPicker(&quot;val&quot;, &quot;" + arr[i].toHEXString() + "&quot;)'></td>";
+            a += "<td>" + arr[i].toHEXString() + "</td>";
+            a += "<td>" + '(' + Math.round(arr[i].rgb[0]) + ', ' + Math.round(arr[i].rgb[1]) + ', ' + Math.round(arr[i].rgb[2]) + ')' + "</td>";
+            a += "<td>" + '(' + Math.round(arr[i].hsv[0]) + ', ' + Math.round(arr[i].hsv[1]) + '%, ' + Math.round(arr[i].hsv[2]) + '%)' + "</td>";
+            a += "</tr>";
+          }
+        }
+        a += "</tbody></table>";
+        document.getElementById("val-table").innerHTML = a;
+      }
+
+      function changeHex(picker) {
+        document.getElementById('bgcolor-hex').value = picker.toHEXString();
+        document.getElementById('colDispHex').innerHTML = picker.toHEXString();
+      }
+
+      function changeHsv(picker) {
+        document.getElementById('bgcolor-hue').value = Math.round(picker.hsv[0]);
+        document.getElementById('bgcolor-sat').value = Math.round(picker.hsv[1]);
+        document.getElementById('bgcolor-val').value = Math.round(picker.hsv[2]);
+        document.getElementById('colDispHsv').innerHTML = 'hsv(' + Math.round(picker.hsv[0]) + ', ' + Math.round(picker.hsv[1]) + '%, ' + Math.round(picker.hsv[2]) + '%)';
+      }
+
+      function changeRgb(picker) {
+        document.getElementById('bgcolor-red').value = Math.round(picker.rgb[0]);
+        document.getElementById('bgcolor-grn').value = Math.round(picker.rgb[1]);
+        document.getElementById('bgcolor-blu').value = Math.round(picker.rgb[2]);
+        document.getElementById('bgcolor-rgb').value = '(' + Math.round(picker.rgb[0]) + ', ' + Math.round(picker.rgb[1]) + ', ' + Math.round(picker.rgb[2]) +')';
+        document.getElementById('colDispRgb').innerHTML = picker.toRGBString();
+      }
+
+      function changeText() {
+        document.getElementById('colDispHex').style.color = document.getElementById('colButton').style.color;
+        document.getElementById('colDispRgb').style.color = document.getElementById('colButton').style.color;
+        document.getElementById('colDispHsv').style.color = document.getElementById('colButton').style.color;
+
+      }
+
+      function changeButton(picker) {
+        document.getElementById('colButton').innerHTML = picker.toHEXString();
+      }
+
+      function changeAll(picker) {
+        document.getElementById('col-disp').style.backgroundColor = picker.toHEXString();
+        document.getElementById('rcorners').style.backgroundColor = picker.toHEXString();
+        document.getElementById('colButton').jscolor.fromString(picker.toHEXString());
+        document.getElementById('colDispHex').value = picker.toHEXString();
+        changeRgb(picker);
+        changeHsv(picker);
+        changeHex(picker);
+        changeButton(picker);
+        changeText();
+        hueTable(picker);
+        satTable(picker);
+        valTable(picker);
+      }
+
+      function toPicker(source, color) {
+        var tmp = document.createElement('SPAN');
+        var picker = new jscolor(tmp);
+        if (source === 'rgb') {
+          var red = document.getElementById('bgcolor-red').value;
+          var grn = document.getElementById('bgcolor-grn').value;
+          var blu = document.getElementById('bgcolor-blu').value;
+          picker.fromRGB(red, grn, blu);
+          changeAll(picker);
+        } else if (source === 'hsv') {
+          var hue = document.getElementById('bgcolor-hue').value;
+          var sat = document.getElementById('bgcolor-sat').value;
+          var val = document.getElementById('bgcolor-val').value;
+          picker.fromHSV(hue, sat, val);
+          changeAll(picker);
+
+        } else if (source === 'hex') {
+          var hex = document.getElementById('bgcolor-hex').value;
+          picker.fromString(hex);
+          changeAll(picker);
+
+        } else if (source === 'hue' || source === 'sat' || source === 'val') {
+          picker.fromString(color);
+          changeAll(picker);
+        } else {
+          var rgb = document.getElementById('bgcolor-rgb').value;
+          rgb = rgb.match(/\d+/g);
+          picker.fromRGB(rgb[0], rgb[1], rgb[2]);
+          changeAll(picker);
+
+        }
+      }
+
+      function copyToClipboard(elementId) {
+        var aux = document.createElement("input");
+        aux.setAttribute("value", document.getElementById(elementId).innerHTML);
+        document.body.appendChild(aux);
+        aux.select();
+        document.execCommand("copy");
+        document.body.removeChild(aux);
+      }
+
+    </script>
+  </head>
+  <body style="background-color: grey;text-align: center">
+
+    <script src="jscolor.js"></script>
+    <div class="container" style="height: 100%" >
+      <ul class="nav nav-tabs" data-tabs="tabs">
+        <li class="active"><a data-toggle="tab" href="#Rgb">Rgb</a></li>
+        <li><a data-toggle="tab" href="#Hue">Hue</a></li>
+        <li><a data-toggle="tab" href="#Saturation">Saturation</a></li>
+        <li><a data-toggle="tab" href="#Lightness">Lightness</a></li>
+      </ul>
+
+      <div class="tab-content" style="width: 100%; height: 100%">
+        <div class="tab-pane fade in active" id="Rgb" style="width=100%">
+          <div id="rgb-tab" style="width: 100%">
+            <h3 id='monoFont'>Rgb</h3>
+            <table class="outer">
+                <td style="border: 0px">
+                  <div class="panel bgcolor">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <th style="font-color: red">RGB</th>
+                          <td>
+                            <input id="bgcolor-rgb" value="(255, 0, 0)" type='text' onchange="toPicker()">
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <th>HEX</th>
+                          <td>
+                            <input id="bgcolor-hex" value="#FF0000" type='text' onchange="toPicker(&quot;hex&quot;)">
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <th>H</th>
+                          <td>
+                            <input id="bgcolor-hue" type='text' value="360" class="short" onchange="toPicker(&quot;hsv&quot;)"> °
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <th>S</th>
+                          <td>
+                            <input id="bgcolor-sat" type='text' value="100" class="short" onchange="toPicker(&quot;hsv&quot;)"> %
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <th>V</th>
+                          <td>
+                            <input id="bgcolor-val" type='text' value="100"class="short" onchange="toPicker(&quot;hsv&quot;)"> %
+                          </td>
+                        </tr>
+
+                        <tr class="red">
+                          <th>R</th>
+                          <td>
+                            <input id="bgcolor-red" type='text' class="short" value="255" onchange="toPicker(&quot;rgb&quot;)">
+                          </td>
+                        </tr>
+
+                        <tr class="grn">
+                          <th>G</th>
+                          <td>
+                            <input id="bgcolor-grn" type='text' class="short" value="0" onchange="toPicker(&quot;rgb&quot;)">
+                          </td>
+                        </tr>
+
+                        <tr class="blu">
+                          <th>B</th>
+                          <td>
+                            <input id="bgcolor-blu" type='text' class="short" value="0" onchange="toPicker(&quot;rgb&quot;)">
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+                <td style="height: 215px">
+                  <p id="rcorners">
+                    <br>
+                    <span style="color: black">Black Text</span><br><br>
+                    <span style="color: black; text-shadow: 1px 1px #737373">Shadow</span><br><br>
+                    <span style="color: white">White Text</span><br><br>
+                    <span style="color: white; text-shadow: 1px 1px #737373">Shadow</span><br>
+                  </p>
+                </td>
+            </table>
+            <div id="col-disp">
+              <table id="colStyle">
+                <tbody>
+                  <tr>
+                    <td id="colDispHex" onclick="copyToClipboard(&quot;colDispHex&quot;)">#FF0000</td>
+                    <td id="colDispRgb" onclick="copyToClipboard(&quot;colDispRgb&quot;)">rgb(255, 0, 0)</td>
+                    <td id="colDispHsv" onclick="copyToClipboard(&quot;colDispHsv&quot;)">hsv(360, 100%, 100%)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="color-button">
+              <button id="colButton" class="jscolor { onFineChange: 'changeAll(this)', value: 'ff0000', backgroundColor: '#4a4a4a', borderWidth: 0, padding: 8 }" value="ff0000" style="width: 100%; height: 30px; font-size: 80%"></button>
+            </div>
+          </div>
+        </div>
+        <div  class="tab-pane fade" id="Hue">
+          <h3 id='monoFont'>Hue</h3>
+          <div id="hue-table">
+            <table style="width:100%; white-space: nowrap; font-size: 14px;">
+              <tbody>
+                <tr>
+                  <th style="width:150px;"></th>
+                  <th><span>    </span></th>
+                  <th>Hex</th>
+                  <th>Rgb</th>
+                  <th>HSV</th>
+                </tr>
+                <tr>
+                  <td style="background-color:#FF0000"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td><b>#FF0000</b></td>
+                  <td><b>(255, 0, 0)</b></td>
+                  <td><b>(0, 100%, 100%)</b></td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF4000" onclick="toPicker(&quot;hue&quot;, &quot;#FF4000&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#FF4000</td>
+                  <td>(255, 64, 0)</td>
+                  <td>(15, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF8000" onclick="toPicker(&quot;hue&quot;, &quot;#FF8000&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#FF8000</td>
+                  <td>(255, 128, 0)</td>
+                  <td>(30, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFBF00" onclick="toPicker(&quot;hue&quot;, &quot;#FFBF00&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#FFBF00</td>
+                  <td>(255, 191, 0)</td>
+                  <td>(45, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFFF00" onclick="toPicker(&quot;hue&quot;, &quot;#FFFF00&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#FFFF00</td>
+                  <td>(255, 255, 0)</td>
+                  <td>(60, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#BFFF00" onclick="toPicker(&quot;hue&quot;, &quot;#BFFF00&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#BFFF00</td>
+                  <td>(191, 255, 0)</td>
+                  <td>(75, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#80FF00" onclick="toPicker(&quot;hue&quot;, &quot;#80FF00&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#80FF00</td>
+                  <td>(128, 255, 0)</td>
+                  <td>(90, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#40FF00" onclick="toPicker(&quot;hue&quot;, &quot;#40FF00&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#40FF00</td>
+                  <td>(64, 255, 0)</td>
+                  <td>(105, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#00FF00" onclick="toPicker(&quot;hue&quot;, &quot;#00FF00&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#00FF00</td>
+                  <td>(0, 255, 0)</td>
+                  <td>(120, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#00FF40" onclick="toPicker(&quot;hue&quot;, &quot;#00FF40&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#00FF40</td>
+                  <td>(0, 255, 64)</td>
+                  <td>(135, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#00FF80" onclick="toPicker(&quot;hue&quot;, &quot;#00FF80&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#00FF80</td>
+                  <td>(0, 255, 128)</td>
+                  <td>(150, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#00FFBF" onclick="toPicker(&quot;hue&quot;, &quot;#00FFBF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#00FFBF</td>
+                  <td>(0, 255, 191)</td>
+                  <td>(165, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#00FFFF" onclick="toPicker(&quot;hue&quot;, &quot;#00FFFF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#00FFFF</td>
+                  <td>(0, 255, 255)</td>
+                  <td>(180, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#00BFFF" onclick="toPicker(&quot;hue&quot;, &quot;#00BFFF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#00BFFF</td>
+                  <td>(0, 191, 255)</td>
+                  <td>(195, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#0080FF" onclick="toPicker(&quot;hue&quot;, &quot;#0080FF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#0080FF</td>
+                  <td>(0, 128, 255)</td>
+                  <td>(210, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#0040FF" onclick="toPicker(&quot;hue&quot;, &quot;#0040FF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#0040FF</td>
+                  <td>(0, 64, 255)</td>
+                  <td>(225, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#0000FF" onclick="toPicker(&quot;hue&quot;, &quot;#0000FF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#0000FF</td>
+                  <td>(0, 0, 255)</td>
+                  <td>(240, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#4000FF" onclick="toPicker(&quot;hue&quot;, &quot;#4000FF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#4000FF</td>
+                  <td>(64, 0, 255)</td>
+                  <td>(255, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#8000FF" onclick="toPicker(&quot;hue&quot;, &quot;#8000FF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#8000FF</td>
+                  <td>(128, 0, 255)</td>
+                  <td>(270, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#BF00FF" onclick="toPicker(&quot;hue&quot;, &quot;#BF00FF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#BF00FF</td>
+                  <td>(191, 0, 255)</td>
+                  <td>(285, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF00FF" onclick="toPicker(&quot;hue&quot;, &quot;#FF00FF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#FF00FF</td>
+                  <td>(255, 0, 255)</td>
+                  <td>(300, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF00BF" onclick="toPicker(&quot;hue&quot;, &quot;#FF00BF&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#FF00BF</td>
+                  <td>(255, 0, 191)</td>
+                  <td>(315, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF0080" onclick="toPicker(&quot;hue&quot;, &quot;#FF0080&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#FF0080</td>
+                  <td>(255, 0, 128)</td>
+                  <td>(330, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF0040" onclick="toPicker(&quot;hue&quot;, &quot;#FF0040&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#FF0040</td>
+                  <td>(255, 0, 64)</td>
+                  <td>(345, 100%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF0000" onclick="toPicker(&quot;hue&quot;, &quot;#FF0000&quot;)"></td>
+                  <td style="width:20px"><span>    </span></td>
+                  <td>#FF0000</td>
+                  <td>(255, 0, 0)</td>
+                  <td>(360, 100%, 100%)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="Saturation">
+          <h3 id='monoFont'>Saturation</h3>
+          <div id="sat-table">
+            <table style="width:100%; white-space: nowrap; font-size: 14px;">
+              <tbody>
+                <tr>
+                  <th style="width:150px;"></th>
+                  <th><span>    </span></th>
+                  <th>Hex</th>
+                  <th>Rgb</th>
+                  <th>HSV</th>
+                </tr>
+                <tr>
+                  <td style="background-color:#FF0000"></td>
+                  <td><b>#FF0000</b></td>
+                  <td><b>(255, 0, 0)</b></td>
+                  <td><b>(0, 100%, 100%)</b></td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF0D0D" onclick="toPicker(&quot;sat&quot;, &quot;#FF0D0D&quot;)"></td>
+                  <td>#FF0D0D</td>
+                  <td>(255, 13, 13)</td>
+                  <td>(0, 95%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF1919" onclick="toPicker(&quot;sat&quot;, &quot;#FF1919&quot;)"></td>
+                  <td>#FF1919</td>
+                  <td>(255, 25, 25)</td>
+                  <td>(0, 90%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF2626" onclick="toPicker(&quot;sat&quot;, &quot;#FF2626&quot;)"></td>
+                  <td>#FF2626</td>
+                  <td>(255, 38, 38)</td>
+                  <td>(0, 85%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF3333" onclick="toPicker(&quot;sat&quot;, &quot;#FF3333&quot;)"></td>
+                  <td>#FF3333</td>
+                  <td>(255, 51, 51)</td>
+                  <td>(0, 80%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF4040" onclick="toPicker(&quot;sat&quot;, &quot;#FF4040&quot;)"></td>
+                  <td>#FF4040</td>
+                  <td>(255, 64, 64)</td>
+                  <td>(0, 75%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF4D4D" onclick="toPicker(&quot;sat&quot;, &quot;#FF4D4D&quot;)"></td>
+                  <td>#FF4D4D</td>
+                  <td>(255, 77, 77)</td>
+                  <td>(0, 70%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF5959" onclick="toPicker(&quot;sat&quot;, &quot;#FF5959&quot;)"></td>
+                  <td>#FF5959</td>
+                  <td>(255, 89, 89)</td>
+                  <td>(0, 65%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF6666" onclick="toPicker(&quot;sat&quot;, &quot;#FF6666&quot;)"></td>
+                  <td>#FF6666</td>
+                  <td>(255, 102, 102)</td>
+                  <td>(0, 60%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF7373" onclick="toPicker(&quot;sat&quot;, &quot;#FF7373&quot;)"></td>
+                  <td>#FF7373</td>
+                  <td>(255, 115, 115)</td>
+                  <td>(0, 55%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF8080" onclick="toPicker(&quot;sat&quot;, &quot;#FF8080&quot;)"></td>
+                  <td>#FF8080</td>
+                  <td>(255, 128, 128)</td>
+                  <td>(0, 50%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF8C8C" onclick="toPicker(&quot;sat&quot;, &quot;#FF8C8C&quot;)"></td>
+                  <td>#FF8C8C</td>
+                  <td>(255, 140, 140)</td>
+                  <td>(0, 45%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FF9999" onclick="toPicker(&quot;sat&quot;, &quot;#FF9999&quot;)"></td>
+                  <td>#FF9999</td>
+                  <td>(255, 153, 153)</td>
+                  <td>(0, 40%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFA6A6" onclick="toPicker(&quot;sat&quot;, &quot;#FFA6A6&quot;)"></td>
+                  <td>#FFA6A6</td>
+                  <td>(255, 166, 166)</td>
+                  <td>(0, 35%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFB3B3" onclick="toPicker(&quot;sat&quot;, &quot;#FFB3B3&quot;)"></td>
+                  <td>#FFB3B3</td>
+                  <td>(255, 179, 179)</td>
+                  <td>(0, 30%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFBFBF" onclick="toPicker(&quot;sat&quot;, &quot;#FFBFBF&quot;)"></td>
+                  <td>#FFBFBF</td>
+                  <td>(255, 191, 191)</td>
+                  <td>(0, 25%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFCCCC" onclick="toPicker(&quot;sat&quot;, &quot;#FFCCCC&quot;)"></td>
+                  <td>#FFCCCC</td>
+                  <td>(255, 204, 204)</td>
+                  <td>(0, 20%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFD9D9" onclick="toPicker(&quot;sat&quot;, &quot;#FFD9D9&quot;)"></td>
+                  <td>#FFD9D9</td>
+                  <td>(255, 217, 217)</td>
+                  <td>(0, 15%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFE6E6" onclick="toPicker(&quot;sat&quot;, &quot;#FFE6E6&quot;)"></td>
+                  <td>#FFE6E6</td>
+                  <td>(255, 230, 230)</td>
+                  <td>(0, 10%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFF2F2" onclick="toPicker(&quot;sat&quot;, &quot;#FFF2F2&quot;)"></td>
+                  <td>#FFF2F2</td>
+                  <td>(255, 242, 242)</td>
+                  <td>(0, 5%, 100%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#FFFFFF" onclick="toPicker(&quot;sat&quot;, &quot;#FFFFFF&quot;)"></td>
+                  <td>#FFFFFF</td>
+                  <td>(255, 255, 255)</td>
+                  <td>(0, 0%, 100%)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="Lightness">
+          <h3 id='monoFont'>Lightness</h3>
+          <div id="val-table">
+            <table style="width:100%; white-space: nowrap; font-size: 14px;">
+              <tbody>
+                <tr>
+                  <th style="width:150px;"></th>
+                  <th><span>    </span></th>
+                  <th>Hex</th>
+                  <th>Rgb</th>
+                  <th>HSV</th>
+                </tr>
+                <tr>
+                  <td style="background-color:#FF0000"></td>
+                  <td><b>#FF0000</b></td>
+                  <td><b>(255, 0, 0)</b></td>
+                  <td><b>(0, 100%, 100%)</b></td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#F20000" onclick="toPicker(&quot;val&quot;, &quot;#F20000&quot;)"></td>
+                  <td>#F20000</td>
+                  <td>(242, 0, 0)</td>
+                  <td>(0, 100%, 95%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#E60000" onclick="toPicker(&quot;val&quot;, &quot;#E60000&quot;)"></td>
+                  <td>#E60000</td>
+                  <td>(230, 0, 0)</td>
+                  <td>(0, 100%, 90%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#D90000" onclick="toPicker(&quot;val&quot;, &quot;#D90000&quot;)"></td>
+                  <td>#D90000</td>
+                  <td>(217, 0, 0)</td>
+                  <td>(0, 100%, 85%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#CC0000" onclick="toPicker(&quot;val&quot;, &quot;#CC0000&quot;)"></td>
+                  <td>#CC0000</td>
+                  <td>(204, 0, 0)</td>
+                  <td>(0, 100%, 80%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#BF0000" onclick="toPicker(&quot;val&quot;, &quot;#BF0000&quot;)"></td>
+                  <td>#BF0000</td>
+                  <td>(191, 0, 0)</td>
+                  <td>(0, 100%, 75%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#B30000" onclick="toPicker(&quot;val&quot;, &quot;#B30000&quot;)"></td>
+                  <td>#B30000</td>
+                  <td>(179, 0, 0)</td>
+                  <td>(0, 100%, 70%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#A60000" onclick="toPicker(&quot;val&quot;, &quot;#A60000&quot;)"></td>
+                  <td>#A60000</td>
+                  <td>(166, 0, 0)</td>
+                  <td>(0, 100%, 65%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#990000" onclick="toPicker(&quot;val&quot;, &quot;#990000&quot;)"></td>
+                  <td>#990000</td>
+                  <td>(153, 0, 0)</td>
+                  <td>(0, 100%, 60%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#8C0000" onclick="toPicker(&quot;val&quot;, &quot;#8C0000&quot;)"></td>
+                  <td>#8C0000</td>
+                  <td>(140, 0, 0)</td>
+                  <td>(0, 100%, 55%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#800000" onclick="toPicker(&quot;val&quot;, &quot;#800000&quot;)"></td>
+                  <td>#800000</td>
+                  <td>(128, 0, 0)</td>
+                  <td>(0, 100%, 50%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#730000" onclick="toPicker(&quot;val&quot;, &quot;#730000&quot;)"></td>
+                  <td>#730000</td>
+                  <td>(115, 0, 0)</td>
+                  <td>(0, 100%, 45%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#660000" onclick="toPicker(&quot;val&quot;, &quot;#660000&quot;)"></td>
+                  <td>#660000</td>
+                  <td>(102, 0, 0)</td>
+                  <td>(0, 100%, 40%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#590000" onclick="toPicker(&quot;val&quot;, &quot;#590000&quot;)"></td>
+                  <td>#590000</td>
+                  <td>(89, 0, 0)</td>
+                  <td>(0, 100%, 35%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#4D0000" onclick="toPicker(&quot;val&quot;, &quot;#4D0000&quot;)"></td>
+                  <td>#4D0000</td>
+                  <td>(77, 0, 0)</td>
+                  <td>(0, 100%, 30%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#400000" onclick="toPicker(&quot;val&quot;, &quot;#400000&quot;)"></td>
+                  <td>#400000</td>
+                  <td>(64, 0, 0)</td>
+                  <td>(0, 100%, 25%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#330000" onclick="toPicker(&quot;val&quot;, &quot;#330000&quot;)"></td>
+                  <td>#330000</td>
+                  <td>(51, 0, 0)</td>
+                  <td>(0, 100%, 20%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#260000" onclick="toPicker(&quot;val&quot;, &quot;#260000&quot;)"></td>
+                  <td>#260000</td>
+                  <td>(38, 0, 0)</td>
+                  <td>(0, 100%, 15%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#1A0000" onclick="toPicker(&quot;val&quot;, &quot;#1A0000&quot;)"></td>
+                  <td>#1A0000</td>
+                  <td>(26, 0, 0)</td>
+                  <td>(0, 100%, 10%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#0D0000" onclick="toPicker(&quot;val&quot;, &quot;#0D0000&quot;)"></td>
+                  <td>#0D0000</td>
+                  <td>(13, 0, 0)</td>
+                  <td>(0, 100%, 5%)</td>
+                </tr>
+                <tr>
+                  <td style="cursor:pointer;background-color:#000000" onclick="toPicker(&quot;val&quot;, &quot;#000000&quot;)"></td>
+                  <td>#000000</td>
+                  <td>(0, 0, 0)</td>
+                  <td>(0, 100%, 0%)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src = "./node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
+  </body>
+</html>
