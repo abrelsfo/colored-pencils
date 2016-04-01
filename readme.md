@@ -9,6 +9,7 @@
 
 ## Screenshots
 
+<<<<<<< HEAD
 ![rgb-tab](./Screenshots/rgb-tab.PNG)
 
 ![hue-tab](./Screenshots/hue-tab.PNG)
@@ -16,6 +17,7 @@
 ![sat-tab](./Screenshots/sat-tab.PNG)
 
 ![val-tab](./Screenshots/val-tab.PNG)
+
 <br>
 
 ## License
