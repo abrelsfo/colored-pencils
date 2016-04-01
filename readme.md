@@ -9,14 +9,13 @@
 
 ## Screenshots
 
-<<<<<<< HEAD
-![rgb-tab](./Screenshots/rgb-tab.PNG)
+![rgb-tab](./screenshots/rgb-tab.PNG)
 
-![hue-tab](./Screenshots/hue-tab.PNG)
+![hue-tab](./screenshots/hue-tab.PNG)
 
-![sat-tab](./Screenshots/sat-tab.PNG)
+![sat-tab](./screenshots/sat-tab.PNG)
 
-![val-tab](./Screenshots/val-tab.PNG)
+![val-tab](./screenshots/val-tab.PNG)
 
 <br>
 
