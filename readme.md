@@ -3,6 +3,8 @@
 
 I created this because I wanted a color palette that combined all my favorite features from w3schools color picker and thomaslindstroms color-picker Atom module. I used jscolor for the mini color picker and to change the text color.
 
+![cpdemo](cpdemo.gif)
+
 ## Features
 
 * On the rgb tab if you click the boxes at the bottom with the color values then it will copy that value into your clipboard.
@@ -13,15 +15,8 @@ I created this because I wanted a color palette that combined all my favorite fe
 
 Go to [Releases](https://github.com/abrelsfo/colored-pencils/releases), then you can download prebuilt binaries
 
-## Screenshots
 
-![rgb-tab](./screenshots/rgb-tab.PNG)
 
-![hue-tab](./screenshots/hue-tab.PNG)
-
-![sat-tab](./screenshots/sat-tab.PNG)
-
-![val-tab](./screenshots/val-tab.PNG)
 
 <br>
 
