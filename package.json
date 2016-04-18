@@ -9,6 +9,13 @@
     "email": "alexbrelsford@gmail.com",
     "url": "abrelsfo.github.io"
   },
+  "build": {
+    "app-category-type": "Developer-Tools",
+    "osx-sign": "Alex Brelsford"
+  },
+  "scripts": {
+    "script": "electron-packager . 'colored-pencils' --platform=darwin --arch=x64"
+  },
 	"bugs":{
 		"url": "https://github.com/abrelsfo/colored-pencils/issues"
 	},
