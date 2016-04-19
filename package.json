@@ -4,6 +4,7 @@
   "description": "Interactive color palette",
   "license": "MIT",
   "repository": "abrelsfo/colored-pencils",
+  "main": "main.js",
   "author": {
     "name": "abrelsfo",
     "email": "alexbrelsford@gmail.com",
