@@ -1,6 +1,7 @@
 {
   "name": "colored-pencils",
   "version": "0.0.0",
+  "main": "main.js",
   "description": "Interactive color palette",
   "license": "MIT",
   "repository": "abrelsfo/colored-pencils",
@@ -14,14 +15,15 @@
     "osx-sign": "Alex Brelsford"
   },
   "scripts": {
-    "script": "electron-packager . 'colored-pencils' --platform=darwin --arch=x64"
+    "precommit": "npm run osx-build",
+    "osx-build": "electron-packager . Colored Pencils --platform=darwin --arch=x64 --out dist --overwrite"
   },
-	"bugs":{
-		"url": "https://github.com/abrelsfo/colored-pencils/issues"
-	},
+  "bugs": {
+    "url": "https://github.com/abrelsfo/colored-pencils/issues"
+  },
   "bin": {
-		"colored-pencils": "cli.js"
-	},
+    "colored-pencils": "cli.js"
+  },
   "engines": {
     "node": ">=5.7.0"
   },
@@ -38,15 +40,17 @@
   ],
   "dependencies": {
     "meow": "^3.7.0",
-		"update-notifier": "^0.6.1",
+    "update-notifier": "^0.6.1",
     "bootstrap": "^3.3.6",
     "jquery": "^2.2.2",
     "electron-prebuilt": "^0.37.2"
   },
   "devDependencies": {
     "ava": "^0.12.0",
-    "xo": "^0.12.1",
-		"eslint-config-xo-space": "^0.8.0"
+    "electron-packager": "^7.0.0",
+    "eslint-config-xo-space": "^0.8.0",
+    "husky": "^0.11.4",
+    "xo": "^0.12.1"
   },
   "xo": {
     "space": true,
